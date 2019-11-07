@@ -44,7 +44,7 @@ class Population:
 
 
 class Individual:
-    def __init__(self, traits, population, position, min_nutritions):
+    def __init__(self, traits, population, position, min_nutritions, game_width, game_height):
         self.mutation_rate = traits['mutation_rate']
         self.vision_distance = traits['vision_distance']
         self.eating_distance = traits['eating_distance']
@@ -57,6 +57,8 @@ class Individual:
         self.min_nutritions = min_nutritions
         self.nutrition = 0
         self.food_to_be_eaten = None
+        self.game_width = game_width
+        self.game_height = game_height
 
     def kill(self):
         self.population.individuals.remove(self)
@@ -93,7 +95,7 @@ class Individual:
         else:
             self.violence_mutation = self.violence
 
-        self.population.individuals.append(Individual({"mutation_rate": self.mutation_rate_mutation, "vision_distance": self.vision_distance_mutation, "eating_distance": self.eating_distance_mutation, "violence": self.violence_mutation}, self.population, [random.randint(1, 800), random.randint(1, 500)], self.min_nutritions))
+        self.population.individuals.append(Individual({"mutation_rate": self.mutation_rate_mutation, "vision_distance": self.vision_distance_mutation, "eating_distance": self.eating_distance_mutation, "violence": self.violence_mutation}, self.population, [random.randint(1, self.game_width), random.randint(1, self.game_height)], self.min_nutritions, self.game_width, self.game_height))
         self.population.added_individuals += 1
         self.nutrition -= self.replication_nutrition
 
@@ -106,7 +108,7 @@ class Individual:
                 self.population.killed_individuals += 1
 
     def determineNextPosition(self, list_of_food):
-        self.closest_food = Food((1000, 1000, 1000), 0)
+        self.closest_food = Food((99999999999999999, 99999999999999999999, 99999999999999999), 0)
         self.list_of_food = list_of_food
         self.foods_able_to_be_travelled_to = []
         for food in self.list_of_food:
@@ -142,15 +144,16 @@ class Individual:
 
 
 class FoodProducer:
-    def __init__(self):
-        pass
+    def __init__(self, game_width, game_height):
+        self.game_width = game_width
+        self.game_height = game_height
 
     def produceFood(self, number_of_food):
         self.number_of_food = number_of_food
         self.food_list = []
 
         for i in range(1, self.number_of_food + 1):
-            self.food_list.append(Food((random.randrange(800), random.randrange(500)), 1))
+            self.food_list.append(Food((random.randrange(self.game_width), random.randrange(self.game_height)), 1))
 
         return(self.food_list)
 
