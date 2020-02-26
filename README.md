@@ -1,3 +1,6 @@
+# evolution-simulator-2 is available! (https://github.com/Phyrik/evolution-simulator-2)
+
+
 # evolution-simulator
 
 A simple simulator to give a basic introduction and understanding of evolution.
